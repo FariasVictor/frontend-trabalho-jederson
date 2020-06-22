@@ -1,0 +1,286 @@
+<html>
+	<head>
+		<title>Entrar - Health Place</title>
+		<style>
+			html {
+				background-color: #7FFFD4;
+			}
+			
+			body {
+				font-family: "Poppins", sans-serif;
+				height: 100vh;
+			}
+
+			a {
+				color: #008B8B;
+				display:inline-block;
+				text-decoration: none;
+				font-weight: 400;
+			}
+
+			h2 {
+				text-align: center;
+				font-size: 16px;
+				font-weight: 600;
+				text-transform: uppercase;
+				display:inline-block;
+				margin: 40px 8px 10px 8px; 
+				color: #cccccc;
+			}
+
+			.painel {
+				display: flex;
+				align-items: center;
+				flex-direction: column; 
+				justify-content: center;
+				width: 100%;
+				min-height: 100%;
+				padding: 20px;
+			}
+
+			#formulario {
+				-webkit-border-radius: 10px 10px 10px 10px;
+				border-radius: 10px 10px 10px 10px;
+				background: #ffffff;
+				padding: 30px;
+				width: 90%;
+				max-width: 450px;
+				position: relative;
+				padding: 0px;
+				-webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+				box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+				text-align: center;
+			}
+
+			#formRodape {
+				background-color: #f6f6f6;
+				border-top: 1px solid #dce8f1;
+				padding: 25px;
+				text-align: center;
+				-webkit-border-radius: 0 0 10px 10px;
+				border-radius: 0 0 10px 10px;
+			}
+
+			h2.inativo {
+				color: #cccccc;
+			}
+
+			h2.ativo {
+				color: #000000;
+				border-bottom: 2px solid #5fbae9;
+			}
+
+			input[type=button], input[type=submit], input[type=reset]  {
+				background-color: #66CDAA;
+				border: none;
+				color: white;
+				padding: 15px 80px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				text-transform: uppercase;
+				font-size: 13px;
+				-webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+				box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+				-webkit-border-radius: 5px 5px 5px 5px;
+				border-radius: 5px 5px 5px 5px;
+				margin: 5px 20px 40px 20px;
+				-webkit-transition: all 0.3s ease-in-out;
+				-moz-transition: all 0.3s ease-in-out;
+				-ms-transition: all 0.3s ease-in-out;
+				-o-transition: all 0.3s ease-in-out;
+				transition: all 0.3s ease-in-out;
+			}
+
+			input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover  {
+				background-color: #008B8B;
+			}
+
+			input[type=button]:ativo, input[type=submit]:ativo, input[type=reset]:ativo  {
+				-moz-transform: scale(0.95);
+				-webkit-transform: scale(0.95);
+				-o-transform: scale(0.95);
+				-ms-transform: scale(0.95);
+				transform: scale(0.95);
+			}
+
+			input[type=text],[type=password] {
+				background-color: #f6f6f6;
+				border: none;
+				color: #000000;
+				padding: 15px 32px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 16px;
+				margin: 5px;
+				width: 85%;
+				border: 2px solid #f6f6f6;
+				-webkit-transition: all 0.5s ease-in-out;
+				-moz-transition: all 0.5s ease-in-out;
+				-ms-transition: all 0.5s ease-in-out;
+				-o-transition: all 0.5s ease-in-out;
+				transition: all 0.5s ease-in-out;
+				-webkit-border-radius: 5px 5px 5px 5px;
+				border-radius: 5px 5px 5px 5px;
+			}
+
+			input[type=text],[type=password]:focus {
+				background-color: #ffffff;
+				border-bottom: 2px solid #5fbae9;
+			}
+
+			input[type=text],[type=password]:placeholder {
+				color: #cccccc;
+			}
+
+			.desaparecerBaixo {
+				-webkit-animation-name: desaparecerBaixo;
+				animation-name: desaparecerBaixo;
+				-webkit-animation-duration: 1s;
+				animation-duration: 1s;
+				-webkit-animation-fill-mode: both;
+				animation-fill-mode: both;
+			}
+
+			@-webkit-keyframes desaparecerBaixo {
+				0% {
+					opacity: 0;
+					-webkit-transform: translate3d(0, -100%, 0);
+					transform: translate3d(0, -100%, 0);
+				}					
+				100% {
+					opacity: 1;
+					-webkit-transform: none;
+					transform: none;
+				}
+			}
+
+			@keyframes desaparecerBaixo {
+				0% {
+					opacity: 0;
+					-webkit-transform: translate3d(0, -100%, 0);
+					transform: translate3d(0, -100%, 0);
+				}
+				100% {
+					opacity: 1;
+					-webkit-transform: none;
+					transform: none;
+				}
+			}
+
+			@-webkit-keyframes aparecerCima { 
+				from { 
+					opacity:0; 
+				} 				
+				to { 
+					opacity:1; 
+				} 
+			}
+			
+			@-moz-keyframes aparecerCima { 
+				from { 
+					opacity:0; 
+				} 
+				to { 
+					opacity:1; 
+				} 
+			}
+			
+			@keyframes aparecerCima { 
+				from { 
+					opacity:0; 
+				} 
+				to { 
+					opacity:1; 
+				} 
+			}
+
+			.aparecerCima {
+				opacity:0;
+				-webkit-animation:aparecerCima ease-in 1;
+				-moz-animation:aparecerCima ease-in 1;
+				animation:aparecerCima ease-in 1;
+				-webkit-animation-fill-mode:forwards;
+				-moz-animation-fill-mode:forwards;
+				animation-fill-mode:forwards;
+				-webkit-animation-duration:1s;
+				-moz-animation-duration:1s;
+				animation-duration:1s;
+			}
+
+			.aparecerCima.primeiro {
+				-webkit-animation-delay: 0.4s;
+				-moz-animation-delay: 0.4s;
+				animation-delay: 0.4s;
+			}
+
+
+			.aparecerCima.segundo {
+				-webkit-animation-delay: 0.6s;
+				-moz-animation-delay: 0.6s;
+				animation-delay: 0.6s;
+			}
+
+			.aparecerCima.terceiro {
+				-webkit-animation-delay: 0.8s;
+				-moz-animation-delay: 0.8s;
+				animation-delay: 0.8s;
+			}
+
+			.aparecerCima.quarto {
+				-webkit-animation-delay: 1s;
+				-moz-animation-delay: 1s;
+				animation-delay: 1s;
+			}
+
+			.sublinhaMouse:after {
+				display: block;
+				left: 0;
+				bottom: -10px;
+				width: 0;
+				height: 2px;
+				background-color: #008B8B;
+				content: "";
+				transition: width 0.2s;
+			}
+
+			.sublinhaMouse:hover {
+			  color: #008B8B;
+			}
+
+			.sublinhaMouse:hover:after{
+			  width: 100%;
+			}
+
+			*:focus {
+				outline: none;
+			} 
+
+			#icon {
+				width:60%;
+			}
+		</style>
+	</head>	
+		
+	<body>
+		<div class="painel desaparecerBaixo">
+			<div id="formulario">
+		
+				<div class="aparecerCima primeiro">
+					<br>
+					<img src="login.png" height=150 width=150 alt="icone"/>
+					<br>
+					<br>
+				</div>
+
+				<form action="Modelo_Web.html">
+					<input type="text" id="login" class="aparecerCima segundo" name="login" placeholder="CPF" required>
+					<input type="password" id="password" class="aparecerCima terceiro" name="password" placeholder="Senha" required>
+					<input type="submit" class="aparecerCima quarto" value="Entrar">
+				</form>			
+
+			</div>
+		</div>
+	</body>
+</html>
