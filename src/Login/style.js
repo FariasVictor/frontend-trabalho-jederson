@@ -55,6 +55,6 @@ export const ErrorSpan = styled.span`
 `
 
 export const SubmitButton = styled(Button)`
-    height: 10%;
-    width: 50%;    
+    height: 8%;
+    width: 40%;
 `;
