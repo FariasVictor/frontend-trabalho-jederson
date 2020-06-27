@@ -10,7 +10,7 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Login} />
-        <Route path="/exam" exact component={ListExams} />
+        <Route path="/exam" exact render={(props)=><ListExams {...props} />}  />
       </Switch>
     </BrowserRouter>
   </>

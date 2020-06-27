@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from '../utils/httpClient'
+
 import { makeStyles } from '@material-ui/core/styles';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
@@ -6,72 +8,103 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
+import { Button } from '@material-ui/core';
+import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
+    maxWidth: 900,
+  },
+  title: {
+    backgroundColor: '#6EFFC3',
   },
   nested: {
     paddingLeft: theme.spacing(4),
   },
 }));
 
-export default function NestedList() {
+export default function NestedList(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
+  const { user } = props
+  const [exams, setExams] = useState([
+    {
+      id: '',
+      type: '',
+      status: '',
+      examData: {},
+      examCompletedDate: '',
+    }
+  ])
 
   const handleClick = () => {
     setOpen(!open);
+    console.log(user)
+    console.log(exams)
   };
 
+  useEffect(() => {
+
+    async function retrieveExams(userType, userId) {
+      axios.get(`exam/${userType}/${userId}`)
+        .then(({ data }) => {
+          setExams(data); console.log(user);
+
+        })
+    }
+    retrieveExams(user.userType, user.userId);
+    console.log()
+  }, [user])
+
+  const treatStatus = (status) => {
+    switch (status) {
+      case 'EXAME_CONCLUIDO':
+        return 'Exame emitido'
+      case 'EXAME_EM_ANDAMENTO':
+        return 'Exame em andamento'
+      case 'EXAME_ANALISADO':
+        return 'Exame já analisado pelo médico'
+      default:
+        return 'Status inválido'
+    }
+  }
+
   return (
-    <List
-      component="nav"
-      aria-labelledby="nested-list-subheader"
+    <List className={classes.root} component="div" aria-labelledby="nested-list-subheader"
       subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
+        <ListSubheader className={classes.title} component="div" >
+          EXAMES
         </ListSubheader>
       }
-      className={classes.root}
     >
-      <ListItem button>
-        <ListItemIcon>
-          <SendIcon />
-        </ListItemIcon>
-        <ListItemText primary="Sent mail" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-      </ListItem>
-      <ListItem button onClick={handleClick}>
-        <ListItemIcon>
-          <InboxIcon />
-        </ListItemIcon>
-        <ListItemText primary="Inbox" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
+      {exams.map((exam) =>
+        <>
+          <ListItem button onClick={handleClick}>
             <ListItemIcon>
-              <StarBorder />
+              <ViewHeadlineIcon />
             </ListItemIcon>
-            <ListItemText primary="Starred" />
+            <ListItemText primary={exam.type} />
+            <ListItemText primary={exam.examRequestedDateTime ? exam.examRequestedDateTime.substring(0, 10) : '-'} />
+            {open ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-        </List>
-      </Collapse>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem className={classes.nested}>
+                <ListItemText primary={"Código: " + exam.id} />
+                <ListItemText primary={"Status: " + treatStatus(exam.status)} />
+                <ListItemText primary={user.userType==='DOCTOR' ? ("Clínica: " + exam.clinic?.name) : ("Médico: " + exam.doctor?.name)} />
+                <ListItemText primary={"Paciente: " + exam.patient?.name} />
+                <Button color="primary" variant="outlined">Detalhes</Button>
+              </ListItem>
+            </List>
+          </Collapse>
+        </>
+      )}
+
     </List>
   );
 }
