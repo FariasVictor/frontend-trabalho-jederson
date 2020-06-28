@@ -1,19 +1,16 @@
 import React from 'react';
-import Login from './Login';
-import ListExams from './ListExams'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import CreateGlobalStyle from './global'
+import { BrowserRouter } from 'react-router-dom'
+import GlobalStyle from './global'
+import Header from './Components/Header';
+import Routes from './routes';
 
 function App() {
-  return (<>
-    <CreateGlobalStyle />
+  return (
     <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={Login} />
-        <Route path="/exam" exact render={(props)=><ListExams {...props} />}  />
-      </Switch>
+      <GlobalStyle />
+      {<Header />}
+      <Routes />
     </BrowserRouter>
-  </>
   );
 }
 
