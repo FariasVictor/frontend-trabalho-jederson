@@ -48,7 +48,6 @@ class Login extends Component {
     }
 
     render() {
-        const { access } = this.state
         return <>
             <Container>
                 <Card>
