@@ -46,8 +46,8 @@ export default function OrderForm(props) {
 
     const classes = useStyles();
     const user = {
-        userTypeEnum: props.location.state.user.userType,
-        userId: props.location.state.user.userId
+        userType: props.location.state.userType,
+        userId: props.location.state.userId
     }
     const [patients, setPatients] = React.useState(
         [

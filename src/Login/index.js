@@ -30,7 +30,9 @@ class Login extends Component {
         axios.post("/access", this.state.access)
             .then(({ data }) => {
                 if (data.userTypeEnum !== 'PATIENT') {
-                    this.props.history.push("/exam", data)
+                    let userType=data.userTypeEnum
+                    let userId=data.userId
+                    this.props.history.push("/exam", ({userType,userId}))
                 } else {
                     this.setState({
                         error: 'Logue como médico ou clínica'

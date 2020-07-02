@@ -7,7 +7,7 @@ class ListExams extends Component {
 
     state = {
         user: {
-            userType: this.props.location.state.userTypeEnum,
+            userType: this.props.location.state.userType,
             userId: this.props.location.state.userId,
         },
         doctor: {

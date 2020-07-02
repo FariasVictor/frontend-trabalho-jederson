@@ -122,7 +122,7 @@ export default function NestedList(props) {
                     {user.userType === 'DOCTOR' ?
                         (<Button className={classes.createOrder} variant="contained">
                             <AddIcon />
-                            <Link className={classes.link} to={{ pathname: "/create", state: { user } }}>
+                            <Link className={classes.link} to={{ pathname: "/create", state: {...user}  }}>
                                 Solicitar exame
                             </Link>
                         </Button>)

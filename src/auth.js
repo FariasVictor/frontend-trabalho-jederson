@@ -1,7 +1,5 @@
 const isAuthenticated=(props) => {
-    // props.location.state?.userTypeEnum && props.location.state?.userId
-    console.log(props)
-    return true;
+        return props.location.state?.userType && props.location.state?.userId
 }
 
 export default isAuthenticated;
