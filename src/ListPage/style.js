@@ -8,5 +8,5 @@ export const Container = styled.div`
 `
 
 export const Board = styled.div`
-    width: 40%;
+    width: 35%;
 `;

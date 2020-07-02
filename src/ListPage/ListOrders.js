@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import { Button } from '@material-ui/core';
+import { Button, Fade, Modal, Backdrop } from '@material-ui/core';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -26,11 +26,12 @@ const useStyles = makeStyles((theme) => ({
         color: '#1A4527',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+		position: 'static',
     },
     createOrder: {
         backgroundColor: '#99FFDD',
-        width: '35%',
+        width: '45%',
         height: '80%',
         color: '#1A4527'
     },
@@ -51,11 +52,41 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-around',
         flexWrap: "wrap",
+        width:'80%',
         '&>*': {
             marginRight: 8,
             width: '34%',
         }
-    }
+    },
+    btnGroup: {
+        width: '20%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        '&>*': {
+            width:'100%',
+            marginTop: '15px'
+        }
+    },
+    status:{
+        '&>*':{
+            fontWeight: 'bolder'
+        }
+    },
+
+    //modal
+
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    paper: {
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
 }));
 
 export default function NestedList(props) {
@@ -88,16 +119,20 @@ export default function NestedList(props) {
             subheader={
                 <ListSubheader className={classes.title} component="div" >
                     <span>SOLICITAÇÕES</span>
-                    <Button className={classes.createOrder} variant="contained">
-                        <AddIcon />
-                        <Link className={classes.link} to={{pathname: "/create", state: {user} }}>
+                    {user.userType === 'DOCTOR' ?
+                        (<Button className={classes.createOrder} variant="contained">
+                            <AddIcon />
+                            <Link className={classes.link} to={{ pathname: "/create", state: { user } }}>
                                 Solicitar exame
-                        </Link>
-                    </Button>
+                            </Link>
+                        </Button>)
+                        : (<></>
+                        )
+                    }
                 </ListSubheader>
             }
         >
-            {orders.map((order, index) => <Item order={order} />)}
+            {orders.map((order) => <Item order={order} user={user} />)}
 
         </List>
     );
@@ -105,17 +140,28 @@ export default function NestedList(props) {
 
 function Item(props) {
     const order = props.order
+    const user = props.user
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false)
+    const [openCollapse, setOpenCollapse] = React.useState(false)
+    const [accept, setAccept] = React.useState(' ')
     const handleClick = () => {
-        setOpen(!open)
+        setOpenCollapse(!openCollapse)
     };
+
+    const [openModal, setOpenModal] = React.useState(false)
+    const handleOpenModal = (id, action) => () => {
+        setOpenModal(!openModal)
+        setAccept(action)
+    }
+    const handleCloseModal = () => {
+        setOpenModal(!openModal)
+    }
 
     const treatStatus = (status) => {
         switch (status) {
-            case 'SOLICITACAO_EM_ANDAMENTO':
+            case 'SOLICITACAO_ABERTA':
                 return 'Aguardando resposta da clínica'
-            case 'SOLICITACAO_NEGADDA':
+            case 'SOLICITACAO_NEGADA':
                 return 'Negado'
             case 'SOLICITACAO_ACEITA':
                 return 'Aceito'
@@ -123,16 +169,34 @@ function Item(props) {
                 return 'Status inválido'
         }
     }
+
+    const refuseOrder = (id) => () => {
+        console.log(props)
+
+        axios.put(`/order/${id}/SOLICITACAO_NEGADA`)
+            .then(() => handleCloseModal())
+            .catch(({ response }) => {console.log(response); handleCloseModal()})        
+    }
+
+    const acceptOrder = (id) => () => {
+        console.log(props)
+        axios.put(`/order/${id}/SOLICITACAO_ACEITA`)
+            .then(() => props.history.push('/exam', user))
+        // handleCloseModal()
+    }
+
+
+
     return (
         <>
             <ListItem key={order.id} button onClick={handleClick}>
                 <ListItemIcon>
                     <ViewHeadlineIcon />
                 </ListItemIcon>
-                <ListItemText primary={order.examType} secondary={`Data: ${order.statusChanged?.substring(0, 10)}`} />
-                {open ? <ExpandLess /> : <ExpandMore />}
+                <ListItemText primary={order.examType} className={order.status==='SOLICITACAO_ABERTA' ? classes.status : {} } secondary={`Data: ${order.statusChanged?.substring(0, 10)}`} />
+                {openCollapse ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={open} timeout="auto" unmountOnExit>
+            <Collapse in={openCollapse} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     <ListItem className={classes.nested}>
                         <div className={classes.detailItems}>
@@ -141,12 +205,50 @@ function Item(props) {
                             <ListItemText primary="Paciente" secondary={order.patient?.name} />
                             <ListItemText primary="Clínica" secondary={order.clinic?.name} />
                         </div>
-                        <Button color="primary" variant="outlined">
-                            Detalhes
-                        </Button>
+                        {user.userType === 'CLINIC' && order.status==='SOLICITACAO_ABERTA' ? (
+                            < div className={classes.btnGroup}>
+                                <Button onClick={handleOpenModal(order.id, 'aceitar')} color="primary" variant="outlined">Aceitar</Button>
+                                <Button onClick={handleOpenModal(order.id, 'recusar')} color="secondary" variant="outlined">Recusar</Button>
+                                {/* <Button fullWidth color="primary" variant="outlined">
+                                    Detalhes
+                                </Button> */}
+                            </div>
+                        ) : (<></>)
+                        }
                     </ListItem>
+
+
+
+                    <div>
+                        <Modal
+                            aria-labelledby="transition-modal-title"
+                            aria-describedby="transition-modal-description"
+                            className={classes.modal}
+                            open={openModal}
+                            onClose={handleCloseModal}
+                            closeAfterTransition
+                            BackdropComponent={Backdrop}
+                            BackdropProps={{
+                                timeout: 500,
+                            }}
+                        >
+                            <Fade in={openModal}>
+                                <div className={classes.paper}>
+                                    <div>
+                                        <p>
+                                            Deseja {`${accept}`} essa solicitação?
+                                        </p>
+                                        <br />
+                                        <Button onClick={accept === 'aceitar' ? acceptOrder(order.id) : refuseOrder(order.id)} color="primary" variant="contained">Confirmar</Button>
+                                        <Button onClick={handleCloseModal} color="secondary" variant="contained">Cancelar</Button>
+                                    </div>
+                                </div>
+                            </Fade>
+                        </Modal>
+                    </div>
                 </List>
             </Collapse>
         </>
     )
 }
+

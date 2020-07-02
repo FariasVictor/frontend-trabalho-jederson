@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import NavBar from '../NavBar'
+// import NavBar from '../NavBar'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -20,16 +20,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const pages = [
-    {
-        title: 'Home',
-        href: '/'
-    },
-    {
-        title: 'Solicitar Exame',
-        href: '/order',
-    },
-]
+// const pages = [
+//     {
+//         title: 'Home',
+//         href: '/'
+//     },
+//     {
+//         title: 'Solicitar Exame',
+//         href: '/order',
+//     },
+// ]
 
 
 export default function Header() {

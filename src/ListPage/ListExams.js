@@ -16,11 +16,13 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		width: '100%',
+		width: '100% !important',
 		maxWidth: 900,
 	},
 	title: {
+		width: '100% !important',
 		backgroundColor: '#6EFFC3',
+		position: 'static',
 	},
 	nested: {
 		display: 'flex',
@@ -69,8 +71,8 @@ export default function NestedListExams(props) {
 		<List className={classes.root} component="div" aria-labelledby="nested-list-subheader"
 			subheader={
 				<ListSubheader className={classes.title} component="div" >
-					EXAMES
-        </ListSubheader>
+				 	EXAMES
+				 </ListSubheader>
 			}
 		>
 			{exams.map((exam) =>
