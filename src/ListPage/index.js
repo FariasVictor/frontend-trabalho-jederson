@@ -22,10 +22,10 @@ class ListExams extends Component {
         return (
             <Container>
                 <Board>
-                    <NestedListExams user={this.state.user} />
+                    <NestedListExams user={this.state.user} {...this.props} />
                 </Board>
                 <Board>
-                    <NestedListOrders user={this.state.user} />
+                    <NestedListOrders user={this.state.user} {...this.props} />
                 </Board>
             </Container>
         )

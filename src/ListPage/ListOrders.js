@@ -118,7 +118,7 @@ export default function NestedList(props) {
         <List className={classes.root} component="div" aria-labelledby="nested-list-subheader"
             subheader={
                 <ListSubheader className={classes.title} component="div" >
-                    <span>SOLICITAÇÕES</span>
+                    <span onClick={() => console.log(props)}>SOLICITAÇÕES</span>
                     {user.userType === 'DOCTOR' ?
                         (<Button className={classes.createOrder} variant="contained">
                             <AddIcon />
@@ -133,7 +133,7 @@ export default function NestedList(props) {
             }
         >
             {/* {orders.map((order) => <Item  />)} */}
-            {orders.map((order) => <Item order={order} user={user} />)}
+            {orders.map((order) => <Item order={order} user={user} {...props} />)}
 
         </List>
     );
@@ -147,6 +147,7 @@ function Item(props) {
     const [accept, setAccept] = React.useState(' ')
     const handleClick = () => {
         setOpenCollapse(!openCollapse)
+        console.log(props)
     };
 
     const [openModal, setOpenModal] = React.useState(false)
@@ -182,8 +183,11 @@ function Item(props) {
     const acceptOrder = (id) => () => {
         console.log(props)
         axios.put(`/order/${id}/SOLICITACAO_ACEITA`)
-            .then(() => props.history.push('/exam', user))
-        // handleCloseModal()
+            .then(() => {
+                // props.history.push('/exam', props.user);
+                window.location.reload()
+                handleCloseModal()
+            })
     }
 
 
