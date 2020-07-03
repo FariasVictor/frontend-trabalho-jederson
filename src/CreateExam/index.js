@@ -56,14 +56,14 @@ class ExamForm extends Component {
         event.preventDefault()
 
         let examDataFiltered = this.state.exam.examData.filter(it => this.isNotEmpty(it))
-        axios.patch(`/exam/${this.state.exam.id}`, examDataFiltered).then(({ response }) => {
-            console.log(response);
+        axios.patch(`/exam/${this.state.exam.id}`, examDataFiltered).then(() => {
+            this.props.history.push("/exam", this.state.user)
         })
     }
     render() {
         return (
             <Container>
-                <Form onSubmit={this.post}>
+                <Form component="form" onSubmit={this.post}>
                     <Typography variant="h3" component="h3">Emissão de Exame</Typography>
 
                     <TextGroup label="Paciente: " value={this.state.exam.patient?.name}/>

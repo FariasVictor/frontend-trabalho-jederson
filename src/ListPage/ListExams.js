@@ -40,13 +40,13 @@ const useStyles = makeStyles((theme) => ({
 		}
 	},
 	link: {
-        '&:active, &:hover': {
-            textDecoration: 'none',
-        },
-        textDecoration: 'none',
+		'&:active, &:hover': {
+			textDecoration: 'none',
+		},
+		textDecoration: 'none',
 		color: 'inherit',
-		height:'100%'
-    },
+		height: '100%'
+	},
 }));
 
 export default function NestedListExams(props) {
@@ -136,13 +136,14 @@ function ExamItem(props) {
 								secondary={user.userType === 'DOCTOR' ? exam.clinic?.name : exam.doctor?.name} />
 						</div>
 
-						<Button color="primary" variant="outlined">
-							{user.userType === 'CLINIC' ?
+						{user.userType === 'CLINIC' ?
+							<Button color="primary" variant="outlined">
 								< Link className={classes.link} to={{ pathname: `/createExam/${exam.id}`, state: { ...user } }}>
 									Emitir
-								</Link> : <></>
-							}
-						</Button>
+								</Link>
+							</Button>
+							: <></>
+						}
 						<Button color="primary" variant="outlined">
 							< Link className={classes.link} to={{ pathname: `/exam/${exam.id}`, state: { ...user } }}>
 								Detalhes
