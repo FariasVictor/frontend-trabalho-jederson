@@ -28,10 +28,18 @@ class Login extends Component {
 
     post = (event) => {
         axios.post("/access", this.state.access)
-            .then(() => this.props.history.push("/exam"))
-            .catch(({ response }) => {
+            .then(({ data }) => {
+                if (data.userTypeEnum !== 'PATIENT') {
+                    let userType=data.userTypeEnum
+                    let userId=data.userId
+                    this.props.history.push("/exam", ({userType,userId}))
+                } else {
+                    this.setState({
+                        error: 'Logue como médico ou clínica'
+                    })
+                }
+            }).catch(({ response }) => {
                 if (response.status === 401) {
-                    console.log(response)
                     this.setState({
                         error: 'Usuário ou senha inválida'
                     })
@@ -42,18 +50,17 @@ class Login extends Component {
     }
 
     render() {
-        const { access } = this.state
         return <>
             <Container>
                 <Card>
                     <Form onSubmit={this.post}>
                         <Img src={Estetoscopio} alt="Login" />
                         <TextGroup>
-                            <TextField defaultValue={access.username} onChange={this.handleChange} id="username" name="username" label="Usuário" />
-                            <TextField onChange={this.handleChange} id="username" name="password" label="Senha" />
+                            <TextField onChange={this.handleChange} name="username" label="Usuário" />
+                            <TextField type="password" onChange={this.handleChange} name="password" label="Senha" />
                             <ErrorSpan>{this.state.error}</ErrorSpan>
                         </TextGroup>
-                        <SubmitButton type="submit">
+                        <SubmitButton variant="contained" color="primary" type="submit">
                             Login
                         </SubmitButton>
                     </Form>
