@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-		position: 'static',
+        position: 'static',
     },
     createOrder: {
         backgroundColor: '#99FFDD',
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-around',
         flexWrap: "wrap",
-        width:'80%',
+        width: '80%',
         '&>*': {
             marginRight: 8,
             width: '34%',
@@ -64,12 +64,12 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         '&>*': {
-            width:'100%',
+            width: '100%',
             marginTop: '15px'
         }
     },
-    status:{
-        '&>*':{
+    status: {
+        '&>*': {
             fontWeight: 'bolder'
         }
     },
@@ -122,7 +122,7 @@ export default function NestedList(props) {
                     {user.userType === 'DOCTOR' ?
                         (<Button className={classes.createOrder} variant="contained">
                             <AddIcon />
-                            <Link className={classes.link} to={{ pathname: "/create", state: {...user}  }}>
+                            <Link className={classes.link} to={{ pathname: "/create", state: { ...user } }}>
                                 Solicitar exame
                             </Link>
                         </Button>)
@@ -132,6 +132,7 @@ export default function NestedList(props) {
                 </ListSubheader>
             }
         >
+            {/* {orders.map((order) => <Item  />)} */}
             {orders.map((order) => <Item order={order} user={user} />)}
 
         </List>
@@ -175,7 +176,7 @@ function Item(props) {
 
         axios.put(`/order/${id}/SOLICITACAO_NEGADA`)
             .then(() => handleCloseModal())
-            .catch(({ response }) => {console.log(response); handleCloseModal()})        
+            .catch(({ response }) => { console.log(response); handleCloseModal() })
     }
 
     const acceptOrder = (id) => () => {
@@ -193,7 +194,7 @@ function Item(props) {
                 <ListItemIcon>
                     <ViewHeadlineIcon />
                 </ListItemIcon>
-                <ListItemText primary={order.examType} className={order.status==='SOLICITACAO_ABERTA' ? classes.status : {} } secondary={`Data: ${order.statusChanged?.substring(0, 10)}`} />
+                <ListItemText primary={order.examType} className={order.status === 'SOLICITACAO_ABERTA' ? classes.status : {}} secondary={`Data: ${order.statusChanged?.substring(0, 10)}`} />
                 {openCollapse ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={openCollapse} timeout="auto" unmountOnExit>
@@ -205,7 +206,7 @@ function Item(props) {
                             <ListItemText primary="Paciente" secondary={order.patient?.name} />
                             <ListItemText primary="Clínica" secondary={order.clinic?.name} />
                         </div>
-                        {user.userType === 'CLINIC' && order.status==='SOLICITACAO_ABERTA' ? (
+                        {user.userType === 'CLINIC' && order.status === 'SOLICITACAO_ABERTA' ? (
                             < div className={classes.btnGroup}>
                                 <Button onClick={handleOpenModal(order.id, 'aceitar')} color="primary" variant="outlined">Aceitar</Button>
                                 <Button onClick={handleOpenModal(order.id, 'recusar')} color="secondary" variant="outlined">Recusar</Button>

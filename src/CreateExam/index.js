@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Container, TextGroup } from './style';
+import { Container, InputGroup } from './style';
 import { Form } from './style';
+import TextGroup  from './TextGroup'
+
 import axios from '../utils/httpClient';
 import { TextField, Typography, List, ButtonGroup, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
@@ -62,19 +64,19 @@ class ExamForm extends Component {
         return (
             <Container>
                 <Form onSubmit={this.post}>
-                    <Typography>Paciente</Typography>
-                    <Typography>{this.state.exam.patient?.name}</Typography>
-                    <Typography>Médico</Typography>
-                    <Typography>{this.state.exam.doctor?.name}</Typography>
-                    <Typography>Clínica</Typography>
-                    <Typography>{this.state.exam.clinic?.name}</Typography>
+                    <Typography variant="h3" component="h3">Emissão de Exame</Typography>
+
+                    <TextGroup label="Paciente: " value={this.state.exam.patient?.name}/>
+                    <TextGroup label="Médico: " value={this.state.exam.doctor?.name}/>
+                    <TextGroup label="Clínica: " value={this.state.exam.clinic?.name}/>
+
                     <List>
                         {
                             this.state.aux.map((it, index) => (
-                                <TextGroup>
+                                <InputGroup>
                                     < TextField name="key" label="Nome do dado" defaultValue={it.key} onChange={(event) => this.handleChange(event, index)} />
                                     < TextField name="value" label="Valor" defaultValue={it.value} onChange={(event) => this.handleChange(event, index)} /><br />
-                                </TextGroup>
+                                </InputGroup>
                             ))
                         }
                     </List>
