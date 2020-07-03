@@ -12,6 +12,7 @@ import { Button } from '@material-ui/core';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NestedListExams(props) {
 	const classes = useStyles();
-	const {user} = props
+	const { user } = props
 	const [exams, setExams] = useState([
 		{
 			id: '',
@@ -71,7 +72,7 @@ export default function NestedListExams(props) {
 		<List className={classes.root} component="div" aria-labelledby="nested-list-subheader"
 			subheader={
 				<ListSubheader className={classes.title} component="div" >
-				 	EXAMES
+					EXAMES
 				 </ListSubheader>
 			}
 		>
@@ -126,7 +127,17 @@ function ExamItem(props) {
 								primary={user.userType === 'DOCTOR' ? "Clínica" : "Médico"}
 								secondary={user.userType === 'DOCTOR' ? exam.clinic?.name : exam.doctor?.name} />
 						</div>
-						<Button color="primary" variant="outlined">Detalhes</Button>
+						<Button color="primary" variant="outlined">
+							{user.userType === 'CLINIC' ?
+								< Link to={{ pathname: `/createExam/${exam.id}`, state: { ...user } }}>
+									Emitir
+								</Link> : <></>
+							}
+							< Link to={{ pathname: `/exam/${exam.id}`, state: { ...user } }}>
+								Detalhes
+							</Link>
+
+						</Button>
 					</ListItem>
 				</List>
 			</Collapse>

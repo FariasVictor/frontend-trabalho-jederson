@@ -9,6 +9,7 @@ import Estetoscopio from '../../assets/img'
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        position:'static',
         // margin: '0 0 50px 0'
     },
     toolBar: {

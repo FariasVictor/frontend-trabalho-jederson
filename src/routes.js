@@ -4,6 +4,8 @@ import ListExams from './ListPage'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import isAuthenticated from "./auth";
 import OrderForm from './CreateOrder'
+import ExamForm from "./CreateExam";
+import SingleExam from "./SingleExam";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={props => (
@@ -23,6 +25,8 @@ class Routes extends Component {
                 <Route exact path="/" component={Login} />
                 <PrivateRoute path="/exam" exact component={(props) => <ListExams {...props} />} />
                 <PrivateRoute path="/create" exact component={(props) => <OrderForm {...props} />} />
+                <PrivateRoute path="/createExam/:id" exact component={(props) => <ExamForm {...props} />} />
+                <PrivateRoute path="/exam/:id" exact component={(props) => <SingleExam {...props} />} />
             </Switch>
         )
     }

@@ -123,7 +123,7 @@ export default function OrderForm(props) {
                                     <em>Selecione um paciente</em>
                                 </MenuItem>
                                 {patients.map(patient => (
-                                    <MenuItem key={patient.id} value={patient?.id}>{patient.name}</MenuItem>
+                                    <MenuItem key={patient?.id} value={patient?.id}>{patient.name}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -148,7 +148,7 @@ export default function OrderForm(props) {
                             Solicitar
                         </Button>
                         <Button size="small" variant="contained" color="secondary">
-                            <Link className={classes.link} to={{ pathname: "/exam", state: { user } }}>
+                            <Link className={classes.link} to={{ pathname: "/exam", state: {...user } }}>
                                 Cancelar
                             </Link>
                         </Button>
